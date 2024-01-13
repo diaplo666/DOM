@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add your CSS styling here */
+    .item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .heart {
+      cursor: pointer;
+    }
+
+    .heart.red {
+      color: red;
+    }
+  </style>
+  <title>Shopping Cart</title>
+</head>
+<body>
+  <div id="cart">
+    <!-- Sample items, adjust as needed -->
+    <div class="item" data-id="1">
+      <span>Item A</span>
+      <button onclick="decreaseQuantity(1)">-</button>
+      <span id="quantity_1">1</span>
+      <button onclick="increaseQuantity(1)">+</button>
+      <span class="heart" onclick="toggleLike(1)">❤️</span>
+      <button onclick="deleteItem(1)">Delete</button>
+      <span id="price_1">$10</span>
+    </div>
+
+    <div class="item" data-id="2">
+      <span>Item B</span>
+      <button onclick="decreaseQuantity(2)">-</button>
+      <span id="quantity_2">2</span>
+      <button onclick="increaseQuantity(2)">+</button>
+      <span class="heart" onclick="toggleLike(2)">❤️</span>
+      <button onclick="deleteItem(2)">Delete</button>
+      <span id="price_2">$20</span>
+    </div>
+
+    <!-- Add more items as needed -->
+
+    <div id="total">Total: $30</div>
+  </div>
+
+  <script>
+    // Add your JavaScript logic here
+    function decreaseQuantity(itemId) {
+      const quantityElement = document.getElementById(`quantity_${itemId}`);
+      let quantity = parseInt(quantityElement.innerText);
+      if (quantity > 1) {
+        quantity--;
+        quantityElement.innerText = quantity;
+        updateTotal();
+      }
+    }
+
+    function increaseQuantity(itemId) {
+      const quantityElement = document.getElementById(`quantity_${itemId}`);
+      let quantity = parseInt(quantityElement.innerText);
+      quantity++;
+      quantityElement.innerText = quantity;
+      updateTotal();
+    }
+
+    function toggleLike(itemId) {
+      const heartElement = document.querySelector(`[data-id="${itemId}"] .heart`);
+      heartElement.classList.toggle('red');
+    }
+
+    function deleteItem(itemId) {
+      const itemElement = document.querySelector(`[data-id="${itemId}"]`);
+      itemElement.remove();
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const prices = document.querySelectorAll('.item:not([style*="display: none;"]) span[id^="price_"]');
+      let total = 0;
+      prices.forEach(priceElement => {
+        const quantity = parseInt(priceElement.previousElementSibling.previousElementSibling.innerText);
+        const price = parseInt(priceElement.innerText.slice(1));
+        total += quantity * price;
+      });
+
+      document.getElementById('total').innerText = `Total: $${total}`;
+    }
+  </script>
+</body>
+</html>
